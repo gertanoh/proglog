@@ -15,3 +15,5 @@ one to write and another to consume
 - Index : the fie we store index entries in
 - Segment : the abstraction that ties a store and index together
 - Log : the abstraction that ties all the segment together
+
+Memory-mapped file can improve read/write times
