@@ -17,3 +17,18 @@ one to write and another to consume
 - Log : the abstraction that ties all the segment together
 
 Memory-mapped file can improve read/write times
+
+
+## Write a log package
+Create a log library
+
+## Network
+Create a service that people can access via network. People do not pay for library, but for services
+Secure the services
+- TLS to authentificate the server
+- TLS mutual authentication, as 2-way auth is mostly common in machine-to-machine comm, i.e distributed systems
+
+- For Authorization, use ACL
+
+- use CFSSL to crete my own CA
+- casbin for ACL

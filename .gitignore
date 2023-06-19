@@ -1,2 +1,9 @@
 # Proto generated files
 *.pb.go
+
+# certifaces
+*.pem
+*.csr
+
+# certifcates test folder
+test/*
