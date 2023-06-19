@@ -32,3 +32,6 @@ Secure the services
 
 - use CFSSL to crete my own CA
 - casbin for ACL
+
+## Add observability
+Metrics, logs and traces
