@@ -44,6 +44,6 @@ serf is simple and decentralized.
 All instances of the server runs a serf node
 ## Data Replication
 pull based vs push-based (raft, leader-follwer replication)
-
+using grpc client, data is replicated
 ### Delivery
 either run package or agent package
