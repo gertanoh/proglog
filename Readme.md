@@ -35,3 +35,15 @@ Secure the services
 
 ## Add observability
 Metrics, logs and traces
+
+# Distrubte
+
+## Service discovery
+using serf or consul or etcd or zookeeper
+serf is simple and decentralized.
+All instances of the server runs a serf node
+## Data Replication
+pull based vs push-based (raft, leader-follwer replication)
+
+### Delivery
+either run package or agent package
