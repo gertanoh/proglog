@@ -7,3 +7,6 @@
 
 # certifcates test folder
 test/*
+
+# debug logs
+*.log

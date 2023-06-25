@@ -71,7 +71,10 @@ func New(c Config) (*Agent, error) {
 }
 
 func (a *Agent) setupLogger() error {
-	logger, err := zap.NewDevelopment()
+	config := zap.NewDevelopmentConfig()
+	config.Level = zap.NewAtomicLevelAt(zap.WarnLevel)
+
+	logger, err := config.Build()
 	if err != nil {
 		return err
 	}

@@ -111,6 +111,25 @@ func TestAgent(t *testing.T) {
 	)
 	require.NoError(t, err)
 	require.Equal(t, consumeResponse.Record.Value, []byte("foo"))
+
+	followerClient = client(t, agents[2], peerTLSConfig)
+	consumeResponse, err = followerClient.Consume(
+		context.Background(),
+		&api.ConsumeRequest{
+			Offset: produceResponse.Offset,
+		},
+	)
+	require.NoError(t, err)
+	require.Equal(t, consumeResponse.Record.Value, []byte("foo"))
+
+	consumeResponse, err = leaderClient.Consume(
+		context.Background(),
+		&api.ConsumeRequest{
+			Offset: produceResponse.Offset + 10,
+		},
+	)
+	require.Nil(t, consumeResponse)
+	require.Error(t, err)
 }
 
 func client(

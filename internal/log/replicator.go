@@ -62,12 +62,19 @@ func (r *Replicator) replicate(addr string, leave chan struct{}) {
 	records := make(chan *api.Record)
 	go func() {
 		for {
-			recv, err := stream.Recv()
-			if err != nil {
-				r.logError(err, "failed to receive", addr)
+			select {
+			case <-r.close:
 				return
+			case <-leave:
+				return
+			default:
+				recv, err := stream.Recv()
+				if err != nil {
+					r.logError(err, "failed to receive", addr)
+					return
+				}
+				records <- recv.Record
 			}
-			records <- recv.Record
 		}
 	}()
 
