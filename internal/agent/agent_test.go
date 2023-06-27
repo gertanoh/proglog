@@ -16,6 +16,7 @@ import (
 	api "github.com/henrtytanoh/proglog/api/v1"
 	"github.com/henrtytanoh/proglog/internal/agent"
 	"github.com/henrtytanoh/proglog/internal/config"
+	"github.com/henrtytanoh/proglog/internal/loadbalance"
 )
 
 func TestAgent(t *testing.T) {
@@ -91,6 +92,8 @@ func TestAgent(t *testing.T) {
 		},
 	)
 	require.NoError(t, err)
+
+	time.Sleep(1 * time.Second)
 	consumeResponse, err := leaderClient.Consume(
 		context.Background(),
 		&api.ConsumeRequest{
@@ -143,9 +146,11 @@ func client(
 	rpcAddr, err := agent.Config.RPCAddr()
 	require.NoError(t, err)
 	conn, err := grpc.Dial(fmt.Sprintf(
-		"%s",
+		"%s:///%s",
+		loadbalance.Name,
 		rpcAddr,
 	), opts...)
+
 	require.NoError(t, err)
 	client := api.NewLogClient(conn)
 	return client

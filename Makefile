@@ -64,7 +64,7 @@ test:
 # START: auth
 test: $(CONFIG_PATH)/policy.csv $(CONFIG_PATH)/model.conf
 #: START: begin
-	go test -v ./...
+	go test ./...
 # END: auth
 
 .PHONY: compile
