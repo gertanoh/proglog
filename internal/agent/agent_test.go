@@ -57,6 +57,7 @@ func TestAgent(t *testing.T) {
 		agent, err := agent.New(agent.Config{
 			NodeName:        fmt.Sprintf("%d", i),
 			StartJoinAddrs:  startJoinAddrs,
+			Boostrap:        i == 0,
 			BindAddr:        bindAddr,
 			RPCPort:         rpcPort,
 			DataDir:         dataDir,
@@ -125,7 +126,7 @@ func TestAgent(t *testing.T) {
 	consumeResponse, err = leaderClient.Consume(
 		context.Background(),
 		&api.ConsumeRequest{
-			Offset: produceResponse.Offset + 10,
+			Offset: produceResponse.Offset + 1,
 		},
 	)
 	require.Nil(t, consumeResponse)
