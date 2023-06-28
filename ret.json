@@ -1,0 +1,119 @@
+---
+# Source: proglog/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: proglog
+  namespace: default
+  labels: 
+    helm.sh/chart: proglog-0.1.0
+    app.kubernetes.io/name: proglog
+    app.kubernetes.io/instance: proglog
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: rpc
+      port: 8400
+      targetPort: 8400
+    - name: serf-tcp
+      protocol: "TCP"
+      port: 8401
+      targetPort: 8401
+    - name: serf-udp
+      protocol: "UDP"
+      port: 8401
+      targetPort: 8401
+  selector: 
+    app.kubernetes.io/name: proglog
+    app.kubernetes.io/instance: proglog
+---
+# Source: proglog/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: proglog
+  namespace: default
+  labels: 
+    helm.sh/chart: proglog-0.1.0
+    app.kubernetes.io/name: proglog
+    app.kubernetes.io/instance: proglog
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels: 
+      app.kubernetes.io/name: proglog
+      app.kubernetes.io/instance: proglog
+  serviceName: proglog
+  replicas: 3
+  template:
+    metadata:
+      name: proglog
+      labels: 
+        helm.sh/chart: proglog-0.1.0
+        app.kubernetes.io/name: proglog
+        app.kubernetes.io/instance: proglog
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      # initContainers...
+      initContainers:
+      - name: proglog-config-init
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command:          
+          - /bin/sh
+          - -c
+          - |-
+            ID=$(echo $HOSTNAME | rev | cut -d- -f1 | rev)
+            cat > /var/run/proglog/config.yaml <<EOD
+            data-dir: /var/run/proglog/data
+            rpc-port: 8400
+            # Make sure the following three key-values are on one line each in
+            # your code. I split them across multiple lines to fit them in
+            # for the book.
+            bind-addr: \
+              "$HOSTNAME.proglog.default.\svc.cluster.local:\
+                8401"
+            bootstrap: $([ $ID = 0 ] && echo true || echo false)
+            $([ $ID != 0 ] && echo 'start-join-addrs: \
+              "proglog-0.proglog.default.svc.cluster.local:\
+                8401"')
+            EOD   
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/run/proglog
+      # containers...
+      containers:
+      - name: proglog
+        image: "github.com/henrtytanoh/proglog:0.0.1"
+        ports:
+        - containerPort: 8400
+          name: rpc
+        - containerPort: 8401
+          name: serf
+        args:
+          - --config-file=/var/run/proglog/config.yaml
+        # probes...
+        readinessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:8400"]
+          initialDelaySeconds: 10
+        livenessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:8400"]
+          initialDelaySeconds: 10
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/run/proglog
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

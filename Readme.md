@@ -47,3 +47,22 @@ pull based vs push-based (raft, leader-follwer replication)
 using grpc client, data is replicated
 ### Delivery
 either run package or agent package
+
+## Deploy
+
+### Use kubernetes with kind for local deployment
+for our service, we will use statefulsets to manage the application as the service persists a log
+* Stable, unique network identifiers—each node in our service requires
+unique node names as identifiers.
+* Stable, persistent storage—our service expects the data its written to
+persist across restarts.
+* Ordered, graceful deployment and scaling—our service needs initial
+node to bootstrap the cluster and join subsequent nodes to its cluster.
+* Ordered, automated rolling updates—we always want our cluster to
+have a leader, and when we roll the leader we want to give the cluster
+enough time to elect a new leader before rolling the next node.
+And by “stable,” I mean persisted across scheduling changes like restarts
+and scaling
+
+for stateless application, use deployment.
+For example, for a service that persists to a relational database, like postgres, you'd run the API service with deployment and Postgres with a statefulset
