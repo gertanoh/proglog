@@ -1,5 +1,0 @@
-data-dir: /home/dev-station/proglog/data
-rpc-port: 8999
-bind-addr: "127.0.0.1:8991"
-boostrap: true
-start-join-addrs: "proglog-0.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}"

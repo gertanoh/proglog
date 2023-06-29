@@ -77,7 +77,7 @@ compile:
 		--proto_path=.
 
 # START: build_docker
-TAG ?= 0.0.2
+TAG ?= 0.0.1
 
 build-docker:
 	docker build -t github.com/henrtytanoh/proglog:$(TAG) .
