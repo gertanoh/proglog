@@ -59,7 +59,10 @@ func New(c Config) (*Agent, error) {
 		shutdowns: make(chan struct{}),
 	}
 
-	logger, err := zap.NewProduction()
+	config := zap.NewDevelopmentConfig()
+	config.Level = zap.NewAtomicLevelAt(zap.WarnLevel)
+
+	logger, err := config.Build()
 	if err != nil {
 		return nil, err
 	}

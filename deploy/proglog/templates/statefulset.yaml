@@ -24,13 +24,8 @@ spec:
           - -c
           - |-
             ID=$(echo $HOSTNAME | rev | cut -d- -f1 | rev)
-            cat > /var/run/proglog/config.yaml <<EOD
-            data-dir: /var/run/proglog/data
-            rpc-port: {{.Values.rpcPort}}
-            bind-addr: "$HOSTNAME.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}"
-            boostrap: $([ $ID = 0 ] && echo true || echo false)
-            $([ $ID != 0 ] && echo 'start-join-addrs: "proglog-0.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}"')
-            EOD
+            printf "data-dir: /var/run/proglog/data\nrpc-port: {{.Values.rpcPort}}\nbind-addr: \"$HOSTNAME.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}\"\nboostrap: $([ $ID = 0 ] && echo true || echo false)\n$([ $ID != 0 ] && echo 'start-join-addrs: \"proglog-0.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}\"')" > /var/run/proglog/config.yaml
+            cat /var/run/proglog/config.yaml
         volumeMounts:
         - name: datadir
           mountPath: /var/run/proglog
@@ -44,7 +39,7 @@ spec:
         - containerPort: {{ .Values.serfPort }}
           name: serf
         args:
-          - --config-file=/var/run/proglog/config.yaml
+        - --config-file=/var/run/proglog/config.yaml
         # probes...
         readinessProbe:
           exec:

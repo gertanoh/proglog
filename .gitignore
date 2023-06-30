@@ -10,3 +10,11 @@ test/*
 
 # debug logs
 *.log
+
+# raft data
+*.index
+*.store
+stable
+
+# exec
+# proglog
