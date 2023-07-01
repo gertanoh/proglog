@@ -1,6 +1,7 @@
 package log
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path"
@@ -77,11 +78,14 @@ func (l *Log) Append(record *api.Record) (uint64, error) {
 	defer l.mu.Unlock()
 	off, err := l.activeSegment.Append(record)
 	if err != nil {
+		fmt.Println("append active segment failed")
 		return 0, err
 	}
 	if l.activeSegment.IsMaxed() {
 		err = l.newSegment(off + 1)
 	}
+	fmt.Println("function append returned ", err)
+
 	return off, err
 }
 

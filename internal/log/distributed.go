@@ -77,9 +77,11 @@ func (l *logStore) StoreLogs(records []*raft.Log) error {
 			Term:  record.Term,
 			Type:  uint32(record.Type),
 		}); err != nil {
+			fmt.Println("storing logs returned : ", err)
 			return err
 		}
 	}
+	fmt.Println("stored logs successfully")
 	return nil
 }
 
@@ -317,7 +319,9 @@ func (l *DistributedLog) setupRaft(dataDir string) error {
 		snapshotStore,
 		transport,
 	)
+
 	if err != nil {
+		fmt.Println("raft setup failed")
 		return err
 	}
 

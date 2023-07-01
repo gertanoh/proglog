@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
-	"path"
 	"syscall"
 
 	"github.com/henrtytanoh/proglog/internal/agent"
@@ -48,12 +46,9 @@ func setupFlags(cmd *cobra.Command) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	cmd.Flags().String("config-file", "", "Path to config file.")
-
-	dataDir := path.Join(os.TempDir(), "proglog")
 	cmd.Flags().String("data-dir",
-		dataDir,
+		"",
 		"Directory to store log and Raft data.")
 	cmd.Flags().String("node-name", hostname, "Unique server ID.")
 
@@ -93,15 +88,7 @@ func (c *cli) setupConfig(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("config file : ", configFile)
-	content, err := ioutil.ReadFile(configFile)
-	if err != nil {
-		fmt.Printf("Error reading file: %v", err)
-		return err
-	}
 
-	// Print the file contents
-	fmt.Println(string(content))
 	viper.SetConfigFile(configFile)
 	if err = viper.ReadInConfig(); err != nil {
 		// it's ok if config file doesn't exist
@@ -109,7 +96,6 @@ func (c *cli) setupConfig(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-
 	c.cfg.DataDir = viper.GetString("data-dir")
 	c.cfg.NodeName = viper.GetString("node-name")
 	c.cfg.BindAddr = viper.GetString("bind-addr")
@@ -150,9 +136,11 @@ func (c *cli) setupConfig(cmd *cobra.Command, args []string) error {
 }
 
 func (c *cli) run(cmd *cobra.Command, args []string) error {
+
 	var err error
 	agent, err := agent.New(c.cfg.Config)
 	if err != nil {
+		fmt.Println("agent creation failed")
 		return err
 	}
 	sigc := make(chan os.Signal, 1)
