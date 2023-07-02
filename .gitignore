@@ -17,4 +17,4 @@ test/*
 stable
 
 # exec
-# proglog
+grpc_health_probe-linux-amd64

@@ -84,7 +84,6 @@ func (l *Log) Append(record *api.Record) (uint64, error) {
 	if l.activeSegment.IsMaxed() {
 		err = l.newSegment(off + 1)
 	}
-	fmt.Println("function append returned ", err)
 
 	return off, err
 }

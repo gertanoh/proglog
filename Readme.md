@@ -66,3 +66,6 @@ and scaling
 
 for stateless application, use deployment.
 For example, for a service that persists to a relational database, like postgres, you'd run the API service with deployment and Postgres with a statefulset
+
+# TODO
+Raft log store does not clean up

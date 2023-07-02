@@ -138,7 +138,6 @@ func (a *Agent) setupLog() error {
 	if a.Config.Boostrap {
 		err = a.log.WaitForLeader(3 * time.Second)
 	}
-	fmt.Println("setupLog returned : ", err)
 	return err
 }
 

@@ -81,7 +81,6 @@ func (l *logStore) StoreLogs(records []*raft.Log) error {
 			return err
 		}
 	}
-	fmt.Println("stored logs successfully")
 	return nil
 }
 

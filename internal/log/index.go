@@ -1,7 +1,6 @@
 package log
 
 import (
-	"fmt"
 	"io"
 	"os"
 
@@ -78,7 +77,6 @@ func (i *index) Read(in int64) (out uint32, pos uint64, err error) {
 
 func (i *index) Write(off uint32, pos uint64) error {
 	if uint64(len(i.mmap)) < i.size+entWidth {
-		fmt.Println("issue with len : ", len(i.mmap), i.size, entWidth)
 		return io.EOF
 	}
 	enc.PutUint32(i.mmap[i.size:i.size+offWidth], off)
