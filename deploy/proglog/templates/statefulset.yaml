@@ -24,8 +24,8 @@ spec:
           - -c
           - |-
             ID=$(echo $HOSTNAME | rev | cut -d- -f1 | rev)
-            printf "data-dir: /var/run/proglog/data\nrpc-port: {{.Values.rpcPort}}\nbind-addr: \"$HOSTNAME.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}\"\nboostrap: $([ $ID = 0 ] && echo true || echo false)\n$([ $ID != 0 ] && echo 'start-join-addrs: \"proglog-0.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}\"')" > /var/run/proglog/config.yaml
-            if [[ -d "/var/run/proglog/data" && $ID == 0 ]]; then
+            printf "data-dir: /var/run/proglog/data\nrpc-port: {{.Values.rpcPort}}\nbind-addr: \"$HOSTNAME.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}\"\nboostrap: $([ $ID = 0 ] && echo true || echo false)\n$([ $ID != 0 ] && echo 'start-join-addrs: "proglog-0.proglog.{{.Release.Namespace}}.svc.cluster.local:{{.Values.serfPort}}\n"')" > /var/run/proglog/config.yaml
+            if [[ -d "/var/run/proglog/data" ]]; then
                 rm -rf /var/run/proglog/data
             fi
             cat /var/run/proglog/config.yaml
@@ -47,11 +47,11 @@ spec:
         readinessProbe:
           grpc:
             port: {{ .Values.rpcPort }}
-          initialDelaySeconds: 10
+          initialDelaySeconds: 1
         livenessProbe:
           grpc:
             port: {{ .Values.rpcPort }}
-          initialDelaySeconds: 10
+          initialDelaySeconds: 1
         volumeMounts:
         - name: datadir
           mountPath: /var/run/proglog
