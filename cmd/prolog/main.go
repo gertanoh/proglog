@@ -143,6 +143,7 @@ func (c *cli) run(cmd *cobra.Command, args []string) error {
 		fmt.Println("agent creation failed")
 		return err
 	}
+	fmt.Println("agent is ready to serve request")
 	sigc := make(chan os.Signal, 1)
 	signal.Notify(sigc, syscall.SIGINT, syscall.SIGTERM)
 	<-sigc

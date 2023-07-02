@@ -45,15 +45,13 @@ spec:
         - --config-file=/var/run/proglog/config.yaml
         # probes...
         readinessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:{{ .Values.rpcPort }}"]
-            # command: ["/bin/grpc_health_probe", "-addr=$(status.podIP):{{ .Values.rpcPort }}"]
-          initialDelaySeconds: 20
+          grpc:
+            port: {{ .Values.rpcPort }}
+          initialDelaySeconds: 10
         livenessProbe:
-          exec:
-            # command: ["/bin/grpc_health_probe", "-addr=$(status.podIP):{{ .Values.rpcPort }}"]
-            command: ["/bin/grpc_health_probe", "-addr=:{{ .Values.rpcPort }}"]
-          initialDelaySeconds: 20
+          grpc:
+            port: {{ .Values.rpcPort }}
+          initialDelaySeconds: 10
         volumeMounts:
         - name: datadir
           mountPath: /var/run/proglog
