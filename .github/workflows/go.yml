@@ -24,6 +24,7 @@ jobs:
       run: |
         wget https://github.com/protocolbuffers/protobuf/releases/download/v3.9.0/protoc-3.9.0-osx-x86_64.zip
         sudo unzip protoc-3.9.0-osx-x86_64.zip -d /usr/local/protobuf
+        echo 'export PATH="$PATH:/usr/local/protobuf/bin"' >> ~/.bashrc
         go mod tidy
         make compile
     - name: Build
