@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         wget https://github.com/protocolbuffers/protobuf/releases/download/v3.9.0/protoc-3.9.0-osx-x86_64.zip
-        unzip protoc-3.9.0-osx-x86_64.zip -d /usr/local/protobuf
+        sudo unzip protoc-3.9.0-osx-x86_64.zip -d /usr/local/protobuf
         go mod tidy
         make compile
     - name: Build
