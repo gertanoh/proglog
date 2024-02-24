@@ -85,4 +85,5 @@ func (s *subConn) GetOrBuildProducer(balancer.ProducerBuilder) (balancer.Produce
 	return nil, nil
 }
 
-func (s *subConn) Connect() {}
+func (s *subConn) Connect()  {}
+func (s *subConn) Shutdown() {}

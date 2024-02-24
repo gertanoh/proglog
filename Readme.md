@@ -2,7 +2,10 @@
 
 ## Introduction
 
-This project is a robust log aggregation service that offers gRPC endpoints for producing and consuming logs. It supports streaming capabilities, ensuring real-time log processing. The log store is replicated using the Raft consensus algorithm with a leader-follow pattern, enhancing fault tolerance and reliability. Additionally, the service ensures secure communication using TLS, with authorization also handled via TLS. Deployment is streamlined and simplified using Helm charts.
+A distruted commit log.
+This repo follows the book [Distributed SErvices with Go](https://pragprog.com/titles/tjgo/distributed-services-with-go/).
+This repo was created to track my progess through the book.
+I managed to have a working version of the distributed Log with a few updates.
+Using helm and kind in WSL is tricky!!
 
-## Installation 
-TODO
+

@@ -1,6 +1,3 @@
-# Proto generated files
-*.pb.go
-
 # certifaces
 *.pem
 *.csr
